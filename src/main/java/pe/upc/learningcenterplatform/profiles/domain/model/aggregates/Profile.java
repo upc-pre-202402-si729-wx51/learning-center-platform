@@ -3,6 +3,7 @@ package pe.upc.learningcenterplatform.profiles.domain.model.aggregates;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import pe.upc.learningcenterplatform.profiles.domain.model.commands.CreateProfileCommand;
 import pe.upc.learningcenterplatform.profiles.domain.model.valueobjetcs.EmailAddress;
 import pe.upc.learningcenterplatform.profiles.domain.model.valueobjetcs.PersonName;
 import pe.upc.learningcenterplatform.profiles.domain.model.valueobjetcs.StreetAddress;
@@ -41,4 +42,9 @@ public class Profile extends AuditableAbstractAggregateRoot<Profile> {
         this.address = new StreetAddress(street, number, city, postalCode, country);
     }
 
+    public Profile(CreateProfileCommand command) {
+        this.name = new PersonName(command.firstName(), command.lastName());
+        this.email = new EmailAddress(command.email());
+        this.address = new StreetAddress(command.street(), command.number(), command.city(), command.postalCode(), command.country());
+    }
 }
